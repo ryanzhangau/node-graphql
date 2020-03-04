@@ -1,6 +1,6 @@
 const rootResolver = {
-  hello: () => {
-    return 'Hello world'
+  ip: function(args, request) {
+    return request.ip
   }
 }
 
