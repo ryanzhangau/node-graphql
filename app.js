@@ -3,9 +3,14 @@ import graphqlHTTP from 'express-graphql'
 import schema from './graphql/schema'
 import rootResolver from './graphql/resolver'
 import ipLogMiddleWare from './middleware/ipLog'
+import bodyParser from 'body-parser'
 
 const app = express()
 const PORT = 9000
+
+app.use(bodyParser.json)
+app.use(bodyParser.urlencoded({ extended: false }))
+app.set('view engine', 'ejs')
 
 app.use(ipLogMiddleWare)
 app.use(
