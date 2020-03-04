@@ -8,7 +8,7 @@ import bodyParser from 'body-parser'
 const app = express()
 const PORT = 9000
 
-app.use(bodyParser.json)
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.set('view engine', 'ejs')
 
@@ -21,7 +21,9 @@ app.use(
     graphiql: true
   })
 )
-
+app.get('/login', (req, res) => {
+  res.render('pages/login')
+})
 app.listen(PORT, () => {
   console.log(`Server running on port: ${PORT}`)
 })
