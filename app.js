@@ -46,7 +46,6 @@ app.get('/test', authMiddleware, (req, res) => {
   res.render('pages/test')
 })
 
-app.use(ipLogMiddleWare)
 app.get(
   '/graphql',
   graphqlHTTP({
