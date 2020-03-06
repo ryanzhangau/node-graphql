@@ -10,8 +10,12 @@ const USER = {
 
 passport.use(
   new LocalStrategy(
-    { usernameField: 'username', passwordField: 'password' },
-    (username, password, done) => {
+    {
+      usernameField: 'username', // the desired username field you have defaults to 'username'
+      passwordField: 'password',
+      passReqToCallback: true
+    },
+    (req, username, password, done) => {
       const user = {}
       if (username === USER.USER_NAME && password === USER.PASSWORD) {
         user.username = username

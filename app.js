@@ -5,6 +5,8 @@ import rootResolver from './graphql/resolver'
 import ipLogMiddleWare from './middleware/ipLog'
 import bodyParser from 'body-parser'
 import passport from './strategy/localStrategy'
+import session from 'express-session'
+import authMiddleware from './middleware/auth'
 
 const app = express()
 const PORT = 9000
@@ -12,6 +14,15 @@ const PORT = 9000
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.set('view engine', 'ejs')
+
+app.use(
+  session({
+    secret: 'passport-tutorial',
+    cookie: { maxAge: 60000 },
+    resave: false,
+    saveUninitialized: false
+  })
+)
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -23,20 +34,21 @@ app.get('/login', (req, res) => {
 app.post(
   '/login',
   passport.authenticate('local', {
-    successRedirect: '/graphql',
-    failureRedirect: '/login',
-    failureFlash: true
-  })
+    successRedirect: '/test',
+    failureRedirect: '/login'
+  }),
+  (req, res) => {
+    res.sendStatus(200)
+  }
 )
 
-app.get('/test', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
+app.get('/test', authMiddleware, (req, res) => {
   res.render('pages/test')
 })
 
 app.use(ipLogMiddleWare)
 app.get(
   '/graphql',
-  passport.authenticate('local', { failureRedirect: '/login' }),
   graphqlHTTP({
     schema,
     rootValue: rootResolver,
