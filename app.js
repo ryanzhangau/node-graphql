@@ -2,7 +2,6 @@ import express from 'express'
 import graphqlHTTP from 'express-graphql'
 import schema from './graphql/schema'
 import rootResolver from './graphql/resolver'
-import ipLogMiddleWare from './middleware/ipLog'
 import bodyParser from 'body-parser'
 import passport from './strategy/localStrategy'
 import session from 'express-session'
@@ -50,7 +49,6 @@ app.get(
   '/graphql',
   graphqlHTTP({
     schema,
-    rootValue: rootResolver,
     graphiql: true
   })
 )

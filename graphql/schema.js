@@ -1,9 +1,26 @@
-import { buildSchema } from 'graphql'
+import { buildSchema, GraphQLObjectType, GraphQLString, GraphQLSchema } from 'graphql'
 
-const schema = buildSchema(`
-  type Query {
-    ip: String
+const Hello = new GraphQLObjectType({
+  name: 'Hello',
+  fields: {
+    hello: { type: GraphQLString }
   }
-`)
+})
+
+const RootQuery = new GraphQLObjectType({
+  name: 'RootQueryType',
+  fields: {
+    hello: {
+      type: Hello,
+      resolve(parent, args) {
+        return 'Hello World'
+      }
+    }
+  }
+})
+
+const schema = new GraphQLSchema({
+  query: RootQuery
+})
 
 export default schema
